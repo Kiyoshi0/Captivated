@@ -915,7 +915,7 @@
   <div id="polaroid-lightbox">
     <div class="lightbox-card" id="lightbox-card">
       <img id="lightbox-img" src="" alt="Memory" />
-      <div class="lightbox-caption" id="lightbox-caption">Since 2019 ♥</div>
+      <div class="lightbox-caption" id="lightbox-caption">My favorite person</div>
       <div class="lightbox-sub">Tap anywhere outside to close</div>
     </div>
   </div>
@@ -1079,8 +1079,7 @@
     ];
     const MEMORY_CAPTIONS = {
       "me.jpg": "I love you",
-      "her.jpg": "My favorite person",
-      "default": "One of my favorite memories with you ✨"
+      "default": "My favorite person"
     };
     const polaroidLayer = document.getElementById("polaroid-layer");
     const petalLayer = document.getElementById("petal-layer");
@@ -1144,17 +1143,32 @@
       return nextSrc;
     }
 
+    const LANE_SLOTS = [4, 24, 44, 64, 80];
+    let laneDeck = [];
+    function getNextLaneLeft() {
+      if (laneDeck.length === 0) {
+        laneDeck = [...LANE_SLOTS];
+        for (let i = laneDeck.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [laneDeck[i], laneDeck[j]] = [laneDeck[j], laneDeck[i]];
+        }
+      }
+      const baseLeft = laneDeck.pop();
+      const jitter = Math.random() * 6 - 3;
+      return Math.max(3, Math.min(82, baseLeft + jitter));
+    }
+
     function spawnPolaroid() {
       const src = getNextPhotoSrc();
       if (!src) return;
       const card = document.createElement("div");
       card.className = "floating-polaroid";
-      card.style.left = (Math.random() * 82 + 4) + "vw";
-      const duration = Math.random() * 6 + 13;
-      const sway = (Math.random() * 70 - 35) + "px";
-      const rotStart = (Math.random() * 16 - 8) + "deg";
-      const rotMid = (Math.random() * 20 - 10) + "deg";
-      const rotEnd = (Math.random() * 24 - 12) + "deg";
+      card.style.left = getNextLaneLeft() + "vw";
+      const duration = Math.random() * 6 + 21;
+      const sway = (Math.random() * 44 - 22) + "px";
+      const rotStart = (Math.random() * 14 - 7) + "deg";
+      const rotMid = (Math.random() * 18 - 9) + "deg";
+      const rotEnd = (Math.random() * 20 - 10) + "deg";
       card.style.animationDuration = duration + "s";
       card.style.setProperty("--sway", sway);
       card.style.setProperty("--rot-start", rotStart);
@@ -1172,13 +1186,13 @@
       polaroidLayer.appendChild(card);
       setTimeout(() => {
         if (pausedPolaroid !== card) card.remove();
-      }, duration * 1000 + 250);
+      }, duration * 1000 + 300);
     }
 
-    for (let i = 0; i < 6; i++) {
-      setTimeout(spawnPolaroid, i * 750);
+    for (let i = 0; i < 4; i++) {
+      setTimeout(spawnPolaroid, i * 2400);
     }
-    setInterval(spawnPolaroid, 2100);
+    setInterval(spawnPolaroid, 3800);
 
     const petalColors = ["#ff8fab", "#ffb3c6", "#ffc2d1", "#f26b8a"];
     function spawnPetal() {
