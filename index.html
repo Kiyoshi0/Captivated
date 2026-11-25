@@ -62,10 +62,10 @@
       bottom: -150px;
       width: 78px;
       padding: 6px 6px 18px 6px;
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid rgba(230, 168, 184, 0.7);
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(230, 168, 184, 0.8);
       border-radius: 8px;
-      box-shadow: 0 10px 24px rgba(180, 90, 118, 0.18);
+      box-shadow: 0 10px 24px rgba(180, 90, 118, 0.22);
       opacity: 0;
       pointer-events: auto;
       cursor: pointer;
@@ -75,7 +75,7 @@
     }
     .floating-polaroid:hover {
       border-color: var(--pink-primary);
-      box-shadow: 0 12px 28px rgba(242, 107, 138, 0.35);
+      box-shadow: 0 12px 28px rgba(242, 107, 138, 0.4);
       z-index: 5;
     }
     .floating-polaroid img {
@@ -100,14 +100,14 @@
         opacity: 0;
       }
       12% {
-        opacity: 0.65;
+        opacity: 0.92;
       }
       50% {
         transform: translateY(-55vh) translateX(var(--sway)) rotate(var(--rot-mid));
-        opacity: 0.62;
+        opacity: 0.9;
       }
       88% {
-        opacity: 0.56;
+        opacity: 0.85;
       }
       100% {
         transform: translateY(-120vh) translateX(calc(var(--sway) * -0.6)) rotate(var(--rot-end));
@@ -157,7 +157,7 @@
     }
     .lightbox-caption {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--berry-text);
       margin-bottom: 4px;
@@ -455,14 +455,8 @@
       font-weight: 700;
       line-height: 1.25;
       color: #ffe3ec;
-      margin-bottom: 6px;
-      min-height: 2.5em;
-    }
-    .celebrate-sub {
-      font-size: 0.8rem;
-      color: #f7c6d6;
       margin-bottom: 12px;
-      line-height: 1.45;
+      min-height: 2.5em;
     }
     .bouquet-canvas-wrap {
       width: 100%;
@@ -961,15 +955,14 @@
   <div id="celebration-screen">
     <div class="yey-badge reveal-stage" id="cel-badge">🎉 YEYYY! UNLOCKED 🎉</div>
     <h2 class="celebrate-heading reveal-stage" id="cel-heading"></h2>
-    <p class="celebrate-sub reveal-stage" id="cel-sub">A little 3D digital bouquet made just for you, loveee ✨</p>
     <div class="bouquet-canvas-wrap" id="bouquet-wrap">
       <canvas id="bouquet-canvas"></canvas>
-      <div class="bouquet-interact-tip">Swipe to spin • Tap to bloom ✨</div>
+      <div class="bouquet-interact-tip">Swipe to spin • Tap to bloom</div>
     </div>
     <div class="bouquet-caption reveal-stage" id="cel-caption">For you ♥</div>
     <div class="celebrate-actions reveal-stage" id="cel-actions">
       <button class="open-letter-btn" id="open-letter-btn">Open My Letter 💌 →</button>
-      <button class="save-card-btn" id="save-bouquet-btn">Save Bouquet &amp; Note 📸</button>
+      <button class="save-card-btn" id="save-bouquet-btn">Save Bouquet &amp; Note</button>
     </div>
   </div>
   <div id="letter-app">
@@ -1063,7 +1056,7 @@
         <div class="signature anim-line">— loveeee</div>
         <div class="slide3-actions anim-line">
           <button class="flower-btn" id="more-flowers-btn">Send More Flowers 🌸</button>
-          <button class="keepsake-btn" id="keepsake-card-btn">Save Bouquet &amp; Note 📸</button>
+          <button class="keepsake-btn" id="keepsake-card-btn">Save Bouquet &amp; Note</button>
         </div>
       </div>
       <div class="slide-nav">
@@ -1076,7 +1069,8 @@
   <audio id="bg-music" src="captivated.mp3" loop preload="auto"></audio>
   <script>
     const CORRECT_PIN = "1119";
-    const RANDOM_PHOTOS = [
+    const ALL_PHOTOS = [
+      "me.jpg", "her.jpg",
       "pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg",
       "pic6.jpg", "pic7.jpg", "pic8.jpg", "pic9.jpg", "pic10.jpg",
       "pic11.jpg", "pic12.jpg", "pic13.jpg", "pic14.jpg", "pic15.jpg",
@@ -1084,8 +1078,8 @@
       "pic21.jpg"
     ];
     const MEMORY_CAPTIONS = {
-      "me.jpg": "Always yours ♥",
-      "her.jpg": "My favorite person 🌸",
+      "me.jpg": "I love you",
+      "her.jpg": "My favorite person",
       "default": "One of my favorite memories with you ✨"
     };
     const polaroidLayer = document.getElementById("polaroid-layer");
@@ -1132,21 +1126,22 @@
       }
     });
 
-    let floatStep = 0;
-    let randomDeck = [];
+    let photoDeck = [];
+    let lastShownPhoto = "";
     function getNextPhotoSrc() {
-      const patternIndex = floatStep % 5;
-      floatStep++;
-      if (patternIndex === 0 || patternIndex === 2) {
-        return "me.jpg";
+      if (photoDeck.length === 0) {
+        photoDeck = [...ALL_PHOTOS];
+        for (let i = photoDeck.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [photoDeck[i], photoDeck[j]] = [photoDeck[j], photoDeck[i]];
+        }
+        if (photoDeck[photoDeck.length - 1] === lastShownPhoto && photoDeck.length > 1) {
+          [photoDeck[0], photoDeck[photoDeck.length - 1]] = [photoDeck[photoDeck.length - 1], photoDeck[0]];
+        }
       }
-      if (patternIndex === 1 || patternIndex === 3) {
-        return "her.jpg";
-      }
-      if (randomDeck.length === 0) {
-        randomDeck = [...RANDOM_PHOTOS].sort(() => Math.random() - 0.5);
-      }
-      return randomDeck.pop();
+      const nextSrc = photoDeck.pop();
+      lastShownPhoto = nextSrc;
+      return nextSrc;
     }
 
     function spawnPolaroid() {
@@ -1180,10 +1175,10 @@
       }, duration * 1000 + 250);
     }
 
-    for (let i = 0; i < 5; i++) {
-      setTimeout(spawnPolaroid, i * 850);
+    for (let i = 0; i < 6; i++) {
+      setTimeout(spawnPolaroid, i * 750);
     }
-    setInterval(spawnPolaroid, 2400);
+    setInterval(spawnPolaroid, 2100);
 
     const petalColors = ["#ff8fab", "#ffb3c6", "#ffc2d1", "#f26b8a"];
     function spawnPetal() {
@@ -1431,11 +1426,10 @@
     function runCelebrationRevealSequence() {
       const badge = document.getElementById("cel-badge");
       const heading = document.getElementById("cel-heading");
-      const sub = document.getElementById("cel-sub");
       const caption = document.getElementById("cel-caption");
       const actions = document.getElementById("cel-actions");
 
-      [badge, heading, sub, caption, actions].forEach(el => el.classList.remove("shown"));
+      [badge, heading, caption, actions].forEach(el => el.classList.remove("shown"));
       heading.textContent = "";
 
       setTimeout(() => {
@@ -1456,7 +1450,6 @@
       }, 950);
 
       setTimeout(() => {
-        sub.classList.add("shown");
         caption.classList.add("shown");
       }, 2100);
 
