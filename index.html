@@ -59,7 +59,7 @@
     #burst-layer { z-index: 80; }
     .floating-polaroid {
       position: absolute;
-      bottom: -150px;
+      bottom: -160px;
       width: 78px;
       padding: 6px 6px 18px 6px;
       background: rgba(255, 255, 255, 0.96);
@@ -110,7 +110,7 @@
         opacity: 0.85;
       }
       100% {
-        transform: translateY(-120vh) translateX(calc(var(--sway) * -0.6)) rotate(var(--rot-end));
+        transform: translateY(-122vh) translateX(calc(var(--sway) * -0.5)) rotate(var(--rot-end));
         opacity: 0;
       }
     }
@@ -915,7 +915,7 @@
   <div id="polaroid-lightbox">
     <div class="lightbox-card" id="lightbox-card">
       <img id="lightbox-img" src="" alt="Memory" />
-      <div class="lightbox-caption" id="lightbox-caption">My favorite person</div>
+      <div class="lightbox-caption" id="lightbox-caption">i love youuuuu 💗</div>
       <div class="lightbox-sub">Tap anywhere outside to close</div>
     </div>
   </div>
@@ -953,7 +953,7 @@
     </div>
   </div>
   <div id="celebration-screen">
-    <div class="yey-badge reveal-stage" id="cel-badge">🎉 YEYYY! UNLOCKED 🎉</div>
+    <div class="yey-badge reveal-stage" id="cel-badge"> YEYYY UNLOCKED!! </div>
     <h2 class="celebrate-heading reveal-stage" id="cel-heading"></h2>
     <div class="bouquet-canvas-wrap" id="bouquet-wrap">
       <canvas id="bouquet-canvas"></canvas>
@@ -961,7 +961,7 @@
     </div>
     <div class="bouquet-caption reveal-stage" id="cel-caption">For you ♥</div>
     <div class="celebrate-actions reveal-stage" id="cel-actions">
-      <button class="open-letter-btn" id="open-letter-btn">Open My Letter 💌 →</button>
+      <button class="open-letter-btn" id="open-letter-btn">Open My Letter  →</button>
       <button class="save-card-btn" id="save-bouquet-btn">Save Bouquet &amp; Note</button>
     </div>
   </div>
@@ -1078,8 +1078,7 @@
       "pic21.jpg"
     ];
     const MEMORY_CAPTIONS = {
-      "me.jpg": "I love you",
-      "default": "My favorite person"
+      "default": "i love youuuuu 💗"
     };
     const polaroidLayer = document.getElementById("polaroid-layer");
     const petalLayer = document.getElementById("petal-layer");
@@ -1143,19 +1142,13 @@
       return nextSrc;
     }
 
-    const LANE_SLOTS = [4, 24, 44, 64, 80];
-    let laneDeck = [];
+    const LANE_SLOTS = [5, 38, 72];
+    let laneIndex = 0;
     function getNextLaneLeft() {
-      if (laneDeck.length === 0) {
-        laneDeck = [...LANE_SLOTS];
-        for (let i = laneDeck.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [laneDeck[i], laneDeck[j]] = [laneDeck[j], laneDeck[i]];
-        }
-      }
-      const baseLeft = laneDeck.pop();
+      const baseLeft = LANE_SLOTS[laneIndex % LANE_SLOTS.length];
+      laneIndex++;
       const jitter = Math.random() * 6 - 3;
-      return Math.max(3, Math.min(82, baseLeft + jitter));
+      return Math.max(3, Math.min(76, baseLeft + jitter));
     }
 
     function spawnPolaroid() {
@@ -1164,11 +1157,11 @@
       const card = document.createElement("div");
       card.className = "floating-polaroid";
       card.style.left = getNextLaneLeft() + "vw";
-      const duration = Math.random() * 6 + 21;
-      const sway = (Math.random() * 44 - 22) + "px";
-      const rotStart = (Math.random() * 14 - 7) + "deg";
-      const rotMid = (Math.random() * 18 - 9) + "deg";
-      const rotEnd = (Math.random() * 20 - 10) + "deg";
+      const duration = 24;
+      const sway = (Math.random() * 24 - 12) + "px";
+      const rotStart = (Math.random() * 12 - 6) + "deg";
+      const rotMid = (Math.random() * 14 - 7) + "deg";
+      const rotEnd = (Math.random() * 16 - 8) + "deg";
       card.style.animationDuration = duration + "s";
       card.style.setProperty("--sway", sway);
       card.style.setProperty("--rot-start", rotStart);
@@ -1189,10 +1182,8 @@
       }, duration * 1000 + 300);
     }
 
-    for (let i = 0; i < 4; i++) {
-      setTimeout(spawnPolaroid, i * 2400);
-    }
-    setInterval(spawnPolaroid, 3800);
+    spawnPolaroid();
+    setInterval(spawnPolaroid, 5500);
 
     const petalColors = ["#ff8fab", "#ffb3c6", "#ffc2d1", "#f26b8a"];
     function spawnPetal() {
