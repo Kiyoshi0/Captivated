@@ -564,16 +564,52 @@
     }
     .music-pill {
       width: 100%;
-      background: var(--pearl);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1.5px solid var(--rose-gold);
+      background: rgba(255, 246, 249, 0.38);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1.5px solid rgba(255, 255, 255, 0.72);
       border-radius: 999px;
       padding: 8px 14px 8px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 10px 28px rgba(182, 92, 120, 0.14);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .music-progress-wrap {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 2px 4px 0;
+    }
+    .music-time {
+      font-size: 0.66rem;
+      font-weight: 600;
+      color: var(--muted-rose);
+      min-width: 28px;
+      font-variant-numeric: tabular-nums;
+    }
+    .music-scrubber {
+      flex: 1;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(242, 107, 138, 0.22);
+      accent-color: var(--pink-primary);
+      cursor: pointer;
+    }
+    .lyric-line {
+      width: 100%;
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--pink-primary);
+      min-height: 1.15em;
+      padding: 0 6px;
+      transition: opacity 0.3s ease;
     }
     .music-left {
       display: flex;
@@ -642,13 +678,13 @@
     }
     .stationery-card {
       width: 100%;
-      background: var(--pearl);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1.5px solid var(--rose-gold);
+      background: rgba(255, 246, 249, 0.34);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1.5px solid rgba(255, 255, 255, 0.72);
       border-radius: 28px;
       padding: 26px 22px 22px;
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 18px 44px rgba(182, 92, 120, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.65);
       position: relative;
       overflow: hidden;
       touch-action: pan-y;
@@ -871,6 +907,64 @@
       transform: scale(0.97);
       background: #ffe3ec;
     }
+    .envelopes-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .envelope-card {
+      background: rgba(255, 255, 255, 0.52);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      border-radius: 18px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      text-align: left;
+      box-shadow: 0 6px 18px rgba(182, 92, 120, 0.1);
+    }
+    .envelope-card:hover {
+      background: rgba(255, 255, 255, 0.74);
+      transform: translateY(-2px);
+    }
+    .envelope-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .envelope-label {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--berry-text);
+    }
+    .envelope-status {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--pink-primary);
+      background: rgba(242, 107, 138, 0.14);
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .envelope-body {
+      display: none;
+      margin-top: 9px;
+      padding-top: 9px;
+      border-top: 1px dashed rgba(212, 134, 156, 0.6);
+      font-size: 0.85rem;
+      line-height: 1.58;
+      color: var(--berry-text);
+    }
+    .envelope-card.open {
+      background: rgba(255, 250, 252, 0.82);
+      border-color: var(--pink-primary);
+    }
+    .envelope-card.open .envelope-body {
+      display: block;
+      animation: popNote 0.35s ease;
+    }
+
     .slide-nav {
       display: flex;
       align-items: center;
@@ -953,7 +1047,7 @@
     </div>
   </div>
   <div id="celebration-screen">
-    <div class="yey-badge reveal-stage" id="cel-badge"> YEYYY UNLOCKED!! </div>
+    <div class="yey-badge reveal-stage" id="cel-badge">🎉 YEYYY! UNLOCKED 🎉</div>
     <h2 class="celebrate-heading reveal-stage" id="cel-heading"></h2>
     <div class="bouquet-canvas-wrap" id="bouquet-wrap">
       <canvas id="bouquet-canvas"></canvas>
@@ -961,7 +1055,7 @@
     </div>
     <div class="bouquet-caption reveal-stage" id="cel-caption">For you ♥</div>
     <div class="celebrate-actions reveal-stage" id="cel-actions">
-      <button class="open-letter-btn" id="open-letter-btn">Open My Letter  →</button>
+      <button class="open-letter-btn" id="open-letter-btn">Open My Letter 💌 →</button>
       <button class="save-card-btn" id="save-bouquet-btn">Save Bouquet &amp; Note</button>
     </div>
   </div>
@@ -977,6 +1071,12 @@
         </div>
       </div>
       <button class="music-toggle" id="music-toggle">Pause ❚❚</button>
+      <div class="music-progress-wrap">
+        <span class="music-time" id="music-current">0:00</span>
+        <input type="range" class="music-scrubber" id="music-scrubber" min="0" max="100" value="0" step="0.1" aria-label="Seek audio">
+        <span class="music-time" id="music-duration">0:00</span>
+      </div>
+      <div class="lyric-line" id="lyric-line">♪ Captivated by you since 2019 ♪</div>
     </div>
     <div class="stationery-card" id="stationery-card">
       <svg class="corner-floral top-left" viewBox="0 0 80 80" fill="none">
@@ -997,6 +1097,7 @@
         <span class="page-label" id="page-label">Letter 1 of 3</span>
         <div class="page-dots">
           <span class="page-dot active"></span>
+          <span class="page-dot"></span>
           <span class="page-dot"></span>
           <span class="page-dot"></span>
         </div>
@@ -1059,7 +1160,42 @@
           <button class="keepsake-btn" id="keepsake-card-btn">Save Bouquet &amp; Note</button>
         </div>
       </div>
-      <div class="slide-nav">
+      <div class="slide" data-slide="3">
+        <h2 class="slide-title anim-line">Open When... 💌</h2>
+        <p class="anim-line">
+          Whenever you need a little reminder of how much you mean to me, tap an envelope below.
+        </p>
+        <div class="envelopes-grid anim-line">
+          <div class="envelope-card" onclick="toggleEnvelope(this)">
+            <div class="envelope-top">
+              <span class="envelope-label">💗 Open when you miss me</span>
+              <span class="envelope-status">Tap to open</span>
+            </div>
+            <div class="envelope-body">
+              Close your eyes and think of how we found our way back to each other after 7 years. Even from afar, you are always on my mind, loveee. Sending you the biggest hug right now.
+            </div>
+          </div>
+          <div class="envelope-card" onclick="toggleEnvelope(this)">
+            <div class="envelope-top">
+              <span class="envelope-label">🌷 Open when you're tired or stressed</span>
+              <span class="envelope-status">Tap to open</span>
+            </div>
+            <div class="envelope-body">
+              Take a deep breath, love. You do so much and give so much care to everyone around you. Let yourself rest today—I am always right here to listen whenever you need to let it out.
+            </div>
+          </div>
+          <div class="envelope-card" onclick="toggleEnvelope(this)">
+            <div class="envelope-top">
+              <span class="envelope-label">✨ Open when you doubt yourself</span>
+              <span class="envelope-status">Tap to open</span>
+            </div>
+            <div class="envelope-body">
+              I am so proud of you po. You are strong, kind, and genuinely special—that is why even after all these years, it is still you. Mahal na mahal kitaaa!
+            </div>
+          </div>
+        </div>
+      </div>
+            <div class="slide-nav">
         <button class="nav-btn" id="prev-btn" disabled>← Back</button>
         <span class="swipe-tip">Swipe or tap</span>
         <button class="nav-btn primary" id="next-btn">Next →</button>
@@ -1577,6 +1713,62 @@
         musicToggle.textContent = "Play ▶";
       }
     });
+
+    const scrubber = document.getElementById("music-scrubber");
+    const currentTimeEl = document.getElementById("music-current");
+    const durationTimeEl = document.getElementById("music-duration");
+    const lyricLineEl = document.getElementById("lyric-line");
+    const CAPTIVATED_CUES = [
+      { t: 0, text: "♪ Captivated by you since 2019 ♪" },
+      { t: 14, text: "♪ Spinning softly in the quiet room ♪" },
+      { t: 32, text: "♪ Every little moment pulled me back to you ♪" },
+      { t: 55, text: "♪ Still you, after all this time ♪" },
+      { t: 80, text: "♪ Mahal na mahal kitaaa 💗 ♪" }
+    ];
+
+    function formatAudioTime(sec) {
+      if (!isFinite(sec) || sec < 0) return "0:00";
+      const mins = Math.floor(sec / 60);
+      const rem = Math.floor(sec % 60);
+      return mins + ":" + (rem < 10 ? "0" : "") + rem;
+    }
+
+    audio.addEventListener("loadedmetadata", () => {
+      scrubber.max = audio.duration || 100;
+      durationTimeEl.textContent = formatAudioTime(audio.duration);
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      if (!isFinite(audio.duration)) return;
+      scrubber.max = audio.duration;
+      scrubber.value = audio.currentTime;
+      currentTimeEl.textContent = formatAudioTime(audio.currentTime);
+      durationTimeEl.textContent = formatAudioTime(audio.duration);
+      let activeCue = CAPTIVATED_CUES[0].text;
+      for (const cue of CAPTIVATED_CUES) {
+        if (audio.currentTime >= cue.t) activeCue = cue.text;
+      }
+      lyricLineEl.textContent = activeCue;
+    });
+
+    scrubber.addEventListener("input", () => {
+      if (!isFinite(audio.duration)) return;
+      audio.currentTime = parseFloat(scrubber.value);
+      currentTimeEl.textContent = formatAudioTime(audio.currentTime);
+    });
+
+    function toggleEnvelope(el) {
+      vibrateDevice(22);
+      const isOpen = el.classList.toggle("open");
+      const statusBadge = el.querySelector(".envelope-status");
+      if (statusBadge) {
+        statusBadge.textContent = isOpen ? "Opened 💗" : "Tap to open";
+      }
+      if (isOpen) {
+        const rect = el.getBoundingClientRect();
+        triggerBloomBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 12);
+      }
+    }
 
     let enteredPin = "";
     const pinDotsWrap = document.getElementById("pin-dots");
