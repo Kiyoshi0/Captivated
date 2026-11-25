@@ -56,7 +56,6 @@
       position: relative;
     }
 
-    /* Ambient Background Layers */
     #polaroid-layer, #petal-layer, #burst-layer {
       position: fixed;
       inset: 0;
@@ -68,7 +67,6 @@
     #petal-layer { z-index: 2; }
     #burst-layer { z-index: 30; }
 
-    /* Floating Polaroids */
     .floating-polaroid {
       position: absolute;
       bottom: -150px;
@@ -121,7 +119,6 @@
       }
     }
 
-    /* Falling Cherry Blossom Petals */
     .petal {
       position: absolute;
       top: -30px;
@@ -146,7 +143,6 @@
       }
     }
 
-    /* Bloom Burst Particles */
     .burst-item {
       position: fixed;
       font-size: 18px;
@@ -165,7 +161,6 @@
       }
     }
 
-    /* ==================== SCREEN 1: LOCK SCREEN ==================== */
     #lock-screen {
       position: relative;
       z-index: 10;
@@ -188,7 +183,6 @@
       pointer-events: none;
     }
 
-    /* Dual Photo Frame */
     .dual-photo-wrap {
       display: flex;
       align-items: center;
@@ -268,7 +262,6 @@
       margin-bottom: 16px;
     }
 
-    /* 4 PIN Dots */
     .pin-dots {
       display: flex;
       justify-content: center;
@@ -309,7 +302,6 @@
       80% { transform: translateX(6px); }
     }
 
-    /* Custom 0-9 Keypad */
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -356,7 +348,6 @@
       color: #fff;
     }
 
-    /* ==================== LETTER EXPERIENCE ==================== */
     #letter-app {
       display: none;
       position: relative;
@@ -377,7 +368,6 @@
       transform: translateY(0);
     }
 
-    /* Persistent Vinyl Player Pill */
     .music-pill {
       width: 100%;
       background: var(--pearl);
@@ -467,7 +457,6 @@
       color: #fff;
     }
 
-    /* Stationery Card */
     .stationery-card {
       width: 100%;
       background: var(--pearl);
@@ -482,7 +471,6 @@
       touch-action: pan-y;
     }
 
-    /* Shimmer sweep for Slide 3 */
     .stationery-card.shimmer::before {
       content: '';
       position: absolute;
@@ -500,7 +488,6 @@
       to { left: 160%; }
     }
 
-    /* Animated Floral Corner Vines */
     .corner-floral {
       position: absolute;
       width: 68px;
@@ -532,7 +519,6 @@
       transform: scale(1) rotate(180deg);
     }
 
-    /* Slide Header & Progress Dots */
     .slide-header {
       display: flex;
       align-items: center;
@@ -568,7 +554,6 @@
       background: var(--pink-primary);
     }
 
-    /* Slides */
     .slide {
       display: none;
     }
@@ -586,7 +571,6 @@
       line-height: 1.25;
     }
 
-    /* Real-time Staggered Paragraph Animation */
     .anim-line {
       opacity: 0;
       transform: translateY(12px);
@@ -602,7 +586,6 @@
       transform: translateY(0);
     }
 
-    /* Screen 2: Tap-to-Bloom Flower Buds */
     .buds-section {
       margin-top: 16px;
       padding-top: 14px;
@@ -687,7 +670,6 @@
       100% { opacity: 1; transform: scale(1); }
     }
 
-    /* Screen 3: Signature & Flower Shower CTA */
     .signature {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
@@ -718,7 +700,6 @@
       transform: scale(0.97);
     }
 
-    /* Navigation Footer */
     .slide-nav {
       display: flex;
       align-items: center;
@@ -926,10 +907,9 @@
   <audio id="bg-music" src="captivated.mp3" loop preload="auto"></audio>
 
   <script>
-    // ==================== CONFIGURATION ====================
+
     const CORRECT_PIN = "1119";
 
-    // Floating background photos (me.jpg, her.jpg, plus pic1.jpg .. pic21.jpg)
     const PHOTO_LIST = [
       "me.jpg", "her.jpg",
       "pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg",
@@ -938,7 +918,6 @@
       "pic16.jpg", "pic17.jpg", "pic18.jpg", "pic19.jpg", "pic20.jpg",
       "pic21.jpg"
     ];
-    // =======================================================
 
     const polaroidLayer = document.getElementById("polaroid-layer");
     const petalLayer = document.getElementById("petal-layer");
@@ -947,7 +926,6 @@
     const vinylDisc = document.getElementById("vinyl-disc");
     const musicToggle = document.getElementById("music-toggle");
 
-    // 1. Continuous Floating Polaroid Background Loop
     let photoCursor = 0;
     function spawnPolaroid() {
       if (!PHOTO_LIST.length) return;
@@ -958,7 +936,7 @@
       card.className = "floating-polaroid";
       card.style.left = (Math.random() * 82 + 4) + "vw";
 
-      const duration = Math.random() * 6 + 13; // 13s - 19s
+      const duration = Math.random() * 6 + 13; 
       const sway = (Math.random() * 70 - 35) + "px";
       const rotStart = (Math.random() * 16 - 8) + "deg";
       const rotMid = (Math.random() * 20 - 10) + "deg";
@@ -981,13 +959,11 @@
       setTimeout(() => card.remove(), duration * 1000 + 200);
     }
 
-    // Seed initial floating polaroids & loop continuously
     for (let i = 0; i < 4; i++) {
       setTimeout(spawnPolaroid, i * 900);
     }
     setInterval(spawnPolaroid, 2600);
 
-    // 2. Continuous Falling Cherry Blossom Petals
     const petalColors = ["#ff8fab", "#ffb3c6", "#ffc2d1", "#f26b8a"];
     function spawnPetal() {
       const petal = document.createElement("div");
@@ -1011,7 +987,6 @@
 
     setInterval(spawnPetal, 420);
 
-    // 3. Bloom Burst Effect
     function triggerBloomBurst(cx = window.innerWidth / 2, cy = window.innerHeight / 2, count = 22) {
       const icons = ["🌸", "🌷", "💗", "✨", "🌺"];
       for (let i = 0; i < count; i++) {
@@ -1032,7 +1007,6 @@
       }
     }
 
-    // 4. Audio Smooth Fade-In (2 Seconds)
     function startMusicWithFadeIn() {
       audio.currentTime = 0;
       audio.volume = 0;
@@ -1062,7 +1036,6 @@
       }
     });
 
-    // 5. Lock Screen Keypad Logic
     let enteredPin = "";
     const pinDotsWrap = document.getElementById("pin-dots");
     const pinDots = pinDotsWrap.querySelectorAll(".pin-dot");
@@ -1116,7 +1089,6 @@
       updateDots();
     });
 
-    // 6. 3-Slide Letter Navigation & Real-Time Animations
     let currentSlide = 0;
     const slides = document.querySelectorAll(".slide");
     const pageDots = document.querySelectorAll(".page-dot");
@@ -1139,7 +1111,6 @@
       prevBtn.disabled = currentSlide === 0;
       nextBtn.textContent = currentSlide === slides.length - 1 ? "Read Again ↺" : "Next →";
 
-      // Trigger corner floral bloom & shimmer on Slide 3
       stationeryCard.classList.remove("bloomed", "shimmer");
       void stationeryCard.offsetWidth;
       stationeryCard.classList.add("bloomed");
@@ -1148,7 +1119,6 @@
         triggerBloomBurst(window.innerWidth / 2, window.innerHeight * 0.45, 24);
       }
 
-      // Staggered real-time reveal of lines in active slide
       const activeLines = slides[currentSlide].querySelectorAll(".anim-line");
       activeLines.forEach((line, idx) => {
         setTimeout(() => {
@@ -1169,7 +1139,6 @@
       }
     });
 
-    // Touch Swipe Support
     let touchStartX = 0;
     stationeryCard.addEventListener("touchstart", e => {
       touchStartX = e.changedTouches[0].screenX;
@@ -1183,7 +1152,6 @@
       }
     }, { passive: true });
 
-    // Tap-to-Bloom Flower Buds (Slide 2)
     function bloomBud(el) {
       if (!el.classList.contains("bloomed")) {
         el.classList.add("bloomed");
@@ -1192,7 +1160,6 @@
       }
     }
 
-    // "Send More Flowers" Button (Slide 3)
     document.getElementById("more-flowers-btn").addEventListener("click", (e) => {
       const rect = e.target.getBoundingClientRect();
       triggerBloomBurst(rect.left + rect.width / 2, rect.top, 26);
